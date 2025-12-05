@@ -14,7 +14,9 @@ router.get("/", (req, res) => {
 
 // add
 router.post("/", (req, res) => {
-  const newId = users.at(-1).id + 1; // get the last user
+  const lastUser = users.at(-1); // get the last user
+  let newId = 1;
+  if (lastUser) newId = lastUser.id + 1;
   const newUser = {
     id: newId,
     name: req.body.name,
@@ -40,11 +42,12 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
   let idx = users.findIndex((u) => u.id === id);
-  if (idx === -1) res.status(404).send("user not found");
+  if (idx === -1) res.status(404).send("User not found");
+
   users = users.filter((u) => u.id !== id);
   idx = users.findIndex((u) => u.id === id);
-  if (idx === -1) res.status(200).send("delete success");
-  else res.status(404).send("delete error");
+  if (idx === -1) res.status(200).send("Delete success");
+  else res.status(404).send("Delete error");
 });
 
 module.exports = router;
